@@ -13,13 +13,13 @@ func GetIncidentList(status string) {
 	method := "GET"
 
 	if status == "closed" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aclosed&offset=0&limit=100&sort=createdAt&order=desc"
+		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aclosed&offset=0&limit=200&sort=createdAt&order=desc"
 
 	} else if status == "resolved" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aresolved&offset=0&limit=100&sort=createdAt&order=desc"
+		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aresolved&offset=0&limit=200&sort=createdAt&order=desc"
 
 	} else if status == "opened" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=100&sort=createdAt&order=desc"
+		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
 	}
 
 	bodyBytes := routes.Handler(method, url)
@@ -77,13 +77,13 @@ func GetIdFromAll(status string) {
 	method := "GET"
 
 	if status == "closed" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aclosed&offset=0&limit=100&sort=createdAt&order=desc"
+		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aclosed&offset=0&limit=200&sort=createdAt&order=desc"
 
 	} else if status == "resolved" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aresolved&offset=0&limit=100&sort=createdAt&order=desc"
+		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aresolved&offset=0&limit=200&sort=createdAt&order=desc"
 
 	} else if status == "opened" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=100&sort=createdAt&order=desc"
+		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
 	}
 
 	bodyBytes := routes.HandlerListID(method, url)
