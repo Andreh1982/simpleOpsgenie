@@ -18,7 +18,7 @@ func Handler(method string, url string) []byte {
 
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "GenieKey 96330d9b-f7c3-4f96-a658-a3e5c761b1f3")
+	req.Header.Add("Authorization", "")
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -47,7 +47,7 @@ func HandlerListID(method string, url string) []byte {
 
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "GenieKey 96330d9b-f7c3-4f96-a658-a3e5c761b1f3")
+	req.Header.Add("Authorization", "")
 
 	resp, err := client.Do(req)
 	if err != nil {
