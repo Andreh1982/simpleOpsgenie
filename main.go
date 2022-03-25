@@ -19,4 +19,6 @@ func main() {
 	// controllers.GetIdFromAll("resolved")
 	// controllers.GetIdFromAll("closed")
 
+	controllers.CreateIncident()
+
 }

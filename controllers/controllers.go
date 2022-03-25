@@ -103,7 +103,30 @@ func GetIdFromAll(status string) {
 }
 
 func CreateIncident() {
-
 	// Cria um incidente, a principio, com valores fixos nos campos para a criação do incidente.
+
+	var apiUrl string
+	var c models.CreateIncident
+
+	method := "POST"
+	apiUrl = "https://api.opsgenie.com/v1/incidents/create"
+
+	c.Message = "Incidente de teste 'Message'"
+	c.Description = "Incidente criado via simpleOpsgenie"
+	// c.Responders[0].ID = "ID do Responder"
+	// c.Responders[0].Type = "Tipo de Responde?"
+	// c.Responders[0].Name = "Fulano da Silva"
+	// c.Tags[0] = "Test"
+	c.Details.Key1 = "Key1"
+	c.Details.Key2 = "Key2"
+	c.Priority = "P1"
+	// c.ImpactedServices[0] = "Meu Serviço Impactado"
+	c.StatusPageEntry.Title = "Incidente #1"
+	c.StatusPageEntry.Detail = "Detalhes do Incidente #1"
+	// createPayload.StatusPageEntry.NotifyStakeholders = "true"
+
+	// json.Marshal(c)
+
+	routes.IncidentHandler(c, method, apiUrl)
 
 }
