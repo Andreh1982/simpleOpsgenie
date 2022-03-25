@@ -101,3 +101,9 @@ func GetIdFromAll(status string) {
 	}
 
 }
+
+func CreateIncident() {
+
+	// Cria um incidente, a principio, com valores fixos nos campos para a criação do incidente.
+
+}

@@ -66,3 +66,25 @@ type PayloadUnitMirror struct {
 	Took      float64 `json:"took"`
 	RequestID string  `json:"requestId"`
 }
+
+type CreateIncident struct {
+	Message     string `json:"message"`
+	Description string `json:"description"`
+	Responders  []struct {
+		ID   string `json:"id,omitempty"`
+		Type string `json:"type"`
+		Name string `json:"name,omitempty"`
+	} `json:"responders"`
+	Tags    []string `json:"tags"`
+	Details struct {
+		Key1 string `json:"key1"`
+		Key2 string `json:"key2"`
+	} `json:"details"`
+	Priority         string   `json:"priority"`
+	ImpactedServices []string `json:"impactedServices"`
+	StatusPageEntry  struct {
+		Title  string `json:"title"`
+		Detail string `json:"detail"`
+	} `json:"statusPageEntry"`
+	NotifyStakeholders bool `json:"notifyStakeholders"`
+}
