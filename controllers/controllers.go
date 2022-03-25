@@ -103,7 +103,7 @@ func GetIdFromAll(status string) {
 }
 
 func CreateIncident() {
-	// Cria um incidente, a principio, com valores fixos nos campos para a criação do incidente.
+	fmt.Println("Criando incidente...")
 
 	var apiUrl string
 	var c models.CreateIncident
@@ -125,6 +125,6 @@ func CreateIncident() {
 	c.StatusPageEntry.Detail = "Detalhes do Incidente #1"
 	// createPayload.StatusPageEntry.NotifyStakeholders = "true"
 
-	routes.IncidentHandler(c, method, apiUrl)
+	routes.CreateIncidentHandler(c, method, apiUrl)
 
 }

@@ -63,7 +63,7 @@ func HandlerListID(method string, url string) []byte {
 	return bodyBytes
 }
 
-func IncidentHandler(c models.CreateIncident, method string, apiUrl string) {
+func CreateIncidentHandler(c models.CreateIncident, method string, apiUrl string) {
 	// fmt.Println(c)
 
 	data, err := json.Marshal(c)
