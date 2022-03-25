@@ -125,8 +125,6 @@ func CreateIncident() {
 	c.StatusPageEntry.Detail = "Detalhes do Incidente #1"
 	// createPayload.StatusPageEntry.NotifyStakeholders = "true"
 
-	// json.Marshal(c)
-
 	routes.IncidentHandler(c, method, apiUrl)
 
 }
