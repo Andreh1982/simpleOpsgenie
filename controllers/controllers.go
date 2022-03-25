@@ -9,6 +9,7 @@ import (
 
 func GetIncidentList(status string) {
 
+	var respPayload models.PayloadListMirror
 	var url string
 	method := "GET"
 
@@ -21,59 +22,38 @@ func GetIncidentList(status string) {
 	} else if status == "opened" {
 		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
 	}
-
 	bodyBytes := routes.Handler(method, url)
 
-	var respPayload models.PayloadListMirror
-
 	if status == "opened" {
-
 		json.Unmarshal(bodyBytes, &respPayload)
 		fmt.Println("Incidentes Abertos:", respPayload.TotalCount)
-		// prettyJson01, _ := json.MarshalIndent(respPayload, "", "\t")
-		// fmt.Println(string(prettyJson01))
 
 	} else if status == "resolved" {
-
 		json.Unmarshal(bodyBytes, &respPayload)
 		fmt.Println("Incidentes Resolvidos:", respPayload.TotalCount)
-		// prettyJson01, _ := json.MarshalIndent(respPayload, "", "\t")
-		// fmt.Println(string(prettyJson01))
 
 	} else if status == "closed" {
-
 		json.Unmarshal(bodyBytes, &respPayload)
 		fmt.Println("Incidentes Fechados:", respPayload.TotalCount)
-		// prettyJson01, _ := json.MarshalIndent(respPayload, "", "\t")
-		// fmt.Println(string(prettyJson01))
-
-		// fmt.Println("Incidentes Resolvidos:", respPayload.Data[0].CreatedAt)
-
 	}
-
 }
 
 func GetOneIncident(incidentID string) {
 
 	var responsePayload models.PayloadUnitMirror
-
 	method := "GET"
 	baseUrl := "https://api.opsgenie.com/v1/incidents/" + incidentID + "?identifierType=tiny"
-	fmt.Println(baseUrl)
-
 	bodyBytes := routes.Handler(method, baseUrl)
 
 	json.Unmarshal(bodyBytes, &responsePayload)
 	prettyJson, _ := json.MarshalIndent(responsePayload, "", "\t")
 	fmt.Println(string(prettyJson))
-
 }
 
 func GetIdFromAll(status string) {
 
 	var responsePayload models.PayloadListMirror
 	var url string
-
 	method := "GET"
 
 	if status == "closed" {
@@ -85,7 +65,6 @@ func GetIdFromAll(status string) {
 	} else if status == "opened" {
 		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
 	}
-
 	bodyBytes := routes.HandlerListID(method, url)
 
 	json.Unmarshal(bodyBytes, &responsePayload)
@@ -97,9 +76,7 @@ func GetIdFromAll(status string) {
 
 		prettyJson, _ := json.MarshalIndent(responsePayload.Data[i].TinyID, "", "\t")
 		fmt.Println(string(prettyJson))
-
 	}
-
 }
 
 func CreateIncident() {
@@ -107,7 +84,6 @@ func CreateIncident() {
 
 	var apiUrl string
 	var c models.CreateIncident
-
 	method := "POST"
 	apiUrl = "https://api.opsgenie.com/v1/incidents/create"
 
@@ -126,5 +102,4 @@ func CreateIncident() {
 	// createPayload.StatusPageEntry.NotifyStakeholders = "true"
 
 	routes.CreateIncidentHandler(c, method, apiUrl)
-
 }
