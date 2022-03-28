@@ -10,28 +10,24 @@ import (
 func GetIncidentList(status string) {
 
 	var respPayload models.PayloadListMirror
-	var url string
+	var apiUrl string
 	method := "GET"
 
 	if status == "closed" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aclosed&offset=0&limit=200&sort=createdAt&order=desc"
-
+		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aclosed&offset=0&limit=200&sort=createdAt&order=desc"
 	} else if status == "resolved" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aresolved&offset=0&limit=200&sort=createdAt&order=desc"
-
+		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aresolved&offset=0&limit=200&sort=createdAt&order=desc"
 	} else if status == "opened" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
+		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
 	}
-	bodyBytes := routes.Handler(method, url)
+	bodyBytes := routes.Handler(method, apiUrl)
 
 	if status == "opened" {
 		json.Unmarshal(bodyBytes, &respPayload)
 		fmt.Println("Incidentes Abertos:", respPayload.TotalCount)
-
 	} else if status == "resolved" {
 		json.Unmarshal(bodyBytes, &respPayload)
 		fmt.Println("Incidentes Resolvidos:", respPayload.TotalCount)
-
 	} else if status == "closed" {
 		json.Unmarshal(bodyBytes, &respPayload)
 		fmt.Println("Incidentes Fechados:", respPayload.TotalCount)
@@ -42,8 +38,8 @@ func GetOneIncident(incidentID string) {
 
 	var responsePayload models.PayloadUnitMirror
 	method := "GET"
-	baseUrl := "https://api.opsgenie.com/v1/incidents/" + incidentID + "?identifierType=tiny"
-	bodyBytes := routes.Handler(method, baseUrl)
+	apiUrl := "https://api.opsgenie.com/v1/incidents/" + incidentID + "?identifierType=tiny"
+	bodyBytes := routes.Handler(method, apiUrl)
 
 	json.Unmarshal(bodyBytes, &responsePayload)
 	prettyJson, _ := json.MarshalIndent(responsePayload, "", "\t")
@@ -53,53 +49,63 @@ func GetOneIncident(incidentID string) {
 func GetIdFromAll(status string) {
 
 	var responsePayload models.PayloadListMirror
-	var url string
+	var apiUrl string
 	method := "GET"
 
 	if status == "closed" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aclosed&offset=0&limit=200&sort=createdAt&order=desc"
-
+		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aclosed&offset=0&limit=200&sort=createdAt&order=desc"
 	} else if status == "resolved" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aresolved&offset=0&limit=200&sort=createdAt&order=desc"
-
+		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aresolved&offset=0&limit=200&sort=createdAt&order=desc"
 	} else if status == "opened" {
-		url = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
+		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
 	}
-	bodyBytes := routes.HandlerListID(method, url)
+	bodyBytes := routes.HandlerListID(method, apiUrl)
 
 	json.Unmarshal(bodyBytes, &responsePayload)
 	total := len(responsePayload.Data)
 
-	fmt.Println("Incidentes Abertos:", total)
+	fmt.Println("Incidents "+status, total)
 
 	for i := 0; i < total; i++ {
-
-		prettyJson, _ := json.MarshalIndent(responsePayload.Data[i].TinyID, "", "\t")
-		fmt.Println(string(prettyJson))
+		idJson, _ := json.MarshalIndent(responsePayload.Data[i].TinyID, "", "\t")
+		createdAtJson, _ := json.MarshalIndent(responsePayload.Data[i].CreatedAt, "", "\t")
+		fmt.Println(string(idJson), string(createdAtJson))
 	}
 }
 
 func CreateIncident() {
 	fmt.Println("Criando incidente...")
 
+	data := struct {
+		ID   string `json:"id"`
+		Type string `json:"type"`
+		Name string `json:"name"`
+	}{
+		"ebc8157f-e43c-478c-ae41-4b05d0682e22",
+		"team",
+		"OPS",
+	}
+
 	var apiUrl string
 	var c models.CreateIncident
 	method := "POST"
 	apiUrl = "https://api.opsgenie.com/v1/incidents/create"
 
-	c.Message = "Incidente de teste 'Message'"
+	c.Message = "Novo incidente de teste #3"
 	c.Description = "Incidente criado via simpleOpsgenie"
-	// c.Responders[0].ID = "ID do Responder"
-	// c.Responders[0].Type = "Tipo de Responde?"
-	// c.Responders[0].Name = "Fulano da Silva"
-	// c.Tags[0] = "Test"
-	c.Details.Key1 = "Key1"
-	c.Details.Key2 = "Key2"
+	c.Responders = append(c.Responders, data)
+	c.Tags = append(c.Tags, "stg")
+	c.Tags = append(c.Tags, "staging")
+	c.Details.Key1 = "Detalhes key 01 lorem ipsun lorem ipsun lorem ipsun."
+	c.Details.Key2 = "Mais detalhes key 02 lorem ipsun lorem ipsun lorem ipsun"
 	c.Priority = "P1"
-	// c.ImpactedServices[0] = "Meu Serviço Impactado"
-	c.StatusPageEntry.Title = "Incidente #1"
-	c.StatusPageEntry.Detail = "Detalhes do Incidente #1"
-	// createPayload.StatusPageEntry.NotifyStakeholders = "true"
+	c.ImpactedServices = append(c.ImpactedServices, "86f95b45-a110-4d1b-9982-050e7ad087e1")
+	c.ImpactedServices = append(c.ImpactedServices, "04e744c8-7556-4e46-8342-f68dbb2a0c35")
+	c.StatusPageEntry.Title = "Incidente #3"
+	c.StatusPageEntry.Detail = "Detalhes do Incidente #3"
+	c.NotifyStakeholders = false
+
+	fmt.Println(c)
 
 	routes.CreateIncidentHandler(c, method, apiUrl)
 }

@@ -71,9 +71,9 @@ type CreateIncident struct {
 	Message     string `json:"message"`
 	Description string `json:"description"`
 	Responders  []struct {
-		ID   string `json:"id,omitempty"`
+		ID   string `json:"id"`
 		Type string `json:"type"`
-		Name string `json:"name,omitempty"`
+		Name string `json:"name"`
 	} `json:"responders"`
 	Tags    []string `json:"tags"`
 	Details struct {
