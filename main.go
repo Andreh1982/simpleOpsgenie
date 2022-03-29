@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"simpleOpsgenie/controllers"
+	"simpleOpsgenie/models"
 )
 
 func main() {
@@ -13,6 +14,7 @@ func main() {
 	GetIncidentVar := flag.String("get", "", "ID from Incident to Retrieve")
 	ListIncidentsIDVar := flag.String("listid", "", "List Incidents ID by Status")
 	CreateIncidentVar := flag.String("create", "", "Create a Incident")
+	ResolveIncidentVar := flag.String("resolve", "opened", "Resolve a Incident")
 
 	fmt.Println("Querying the API...")
 
@@ -29,6 +31,9 @@ func main() {
 	}
 	if *CreateIncidentVar != "" {
 		CreateIncident(CreateIncidentVar)
+	}
+	if *ResolveIncidentVar != "" {
+		ResolveIncident(ResolveIncidentVar)
 	}
 
 }
@@ -68,5 +73,11 @@ func ListIncidentsID(ListIncidentsIDVar *string) {
 	} else if *ListIncidentsIDVar == "" {
 		os.Exit(0)
 	}
+
+}
+
+func ResolveIncident(ResolveIncidentVar *string) {
+
+	controllers.ResolveIncident(models.PayloadUnitMirror{})
 
 }

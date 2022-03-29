@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
+	"os"
 	"simpleOpsgenie/handlers"
 	"simpleOpsgenie/models"
 )
@@ -112,4 +114,21 @@ func CreateIncident(ListIncidentsIDVar *string) {
 	fmt.Println(c)
 
 	handlers.HandlerCreate(c, method, apiUrl)
+}
+
+func ResolveIncident(c models.PayloadUnitMirror) {
+
+	apiUrl, _ := handlers.InitEnv()
+
+	GetIdFromAll("opened")
+
+	fmt.Print("Insert incident ID(Tiny): ")
+	input := bufio.NewScanner(os.Stdin)
+	input.Scan()
+	incidentID := input.Text()
+
+	apiUrlString = apiUrl + "incidents/" + incidentID + "/resolve?identifierType=tiny"
+
+	handlers.HandlerResolve(c, apiUrlString)
+
 }
