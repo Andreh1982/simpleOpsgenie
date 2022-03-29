@@ -14,7 +14,7 @@ func main() {
 	GetIncidentVar := flag.String("get", "", "ID from Incident to Retrieve")
 	ListIncidentsIDVar := flag.String("listid", "", "List Incidents ID by Status")
 	CreateIncidentVar := flag.String("create", "", "Create a Incident")
-	ResolveIncidentVar := flag.String("resolve", "opened", "Resolve a Incident")
+	ResolveIncidentVar := flag.String("resolve", "", "Resolve a Incident")
 
 	fmt.Println("Querying the API...")
 
