@@ -9,16 +9,15 @@ import (
 )
 
 func main() {
-
-	ListIncidentsVar := flag.String("list", "", "List Incidents by Status")
-	GetIncidentVar := flag.String("get", "", "ID from Incident to Retrieve")
-	ListIncidentsIDVar := flag.String("listid", "", "List Incidents ID by Status")
-	CreateIncidentVar := flag.String("create", "", "Create a Incident")
-	ResolveIncidentVar := flag.String("resolve", "", "Resolve a Incident")
-
-	fmt.Println("Querying the API...")
+	ListIncidentsVar := flag.String("list", "", "List Incidents by Status(opened, resolved, closed)")
+	GetIncidentVar := flag.String("get", "", "Tiny ID from Incident to Retrieve")
+	ListIncidentsIDVar := flag.String("listid", "", "List Incidents ID by Status(opened, resolved, closed")
+	CreateIncidentVar := flag.String("create", "", "Create a Incident Indented by Number")
+	ResolveIncidentVar := flag.String("resolve", "", "Resolve a Incident(will prompt for wich one)")
 
 	flag.Parse()
+
+	fmt.Println("Querying the API...")
 
 	if *ListIncidentsVar != "" {
 		ListIncidents(ListIncidentsVar)
@@ -35,7 +34,6 @@ func main() {
 	if *ResolveIncidentVar != "" {
 		ResolveIncident(ResolveIncidentVar)
 	}
-
 }
 
 func CreateIncident(CreateIncidentVar *string) {
@@ -49,7 +47,6 @@ func GetIncident(GetIncidentVar *string) {
 }
 
 func ListIncidents(ListIncidentsVar *string) {
-
 	if *ListIncidentsVar == "opened" {
 		controllers.GetIncidentList("opened")
 	} else if *ListIncidentsVar == "resolved" {
@@ -59,11 +56,9 @@ func ListIncidents(ListIncidentsVar *string) {
 	} else if *ListIncidentsVar == "" {
 		os.Exit(0)
 	}
-
 }
 
 func ListIncidentsID(ListIncidentsIDVar *string) {
-
 	if *ListIncidentsIDVar == "opened" {
 		controllers.GetIdFromAll("opened")
 	} else if *ListIncidentsIDVar == "resolved" {
@@ -73,11 +68,8 @@ func ListIncidentsID(ListIncidentsIDVar *string) {
 	} else if *ListIncidentsIDVar == "" {
 		os.Exit(0)
 	}
-
 }
 
 func ResolveIncident(ResolveIncidentVar *string) {
-
 	controllers.ResolveIncident(models.PayloadUnitMirror{})
-
 }

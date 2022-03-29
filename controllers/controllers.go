@@ -12,9 +12,7 @@ import (
 var apiUrlString string
 
 func GetIncidentList(status string) {
-
 	apiUrl, _ := handlers.InitEnv()
-
 	var respPayload models.PayloadListMirror
 	method := "GET"
 
@@ -40,20 +38,17 @@ func GetIncidentList(status string) {
 }
 
 func GetOneIncident(incidentID string) {
-
 	apiUrl, _ := handlers.InitEnv()
 	var responsePayload models.PayloadUnitMirror
 	method := "GET"
 	apiUrlString = apiUrl + "incidents/" + incidentID + "?identifierType=tiny"
 	bodyBytes := handlers.HandlerSingle(method, apiUrlString)
-
 	json.Unmarshal(bodyBytes, &responsePayload)
 	prettyJson, _ := json.MarshalIndent(responsePayload, "", "\t")
 	fmt.Println(string(prettyJson))
 }
 
 func GetIdFromAll(status string) {
-
 	apiUrl, _ := handlers.InitEnv()
 	var responsePayload models.PayloadListMirror
 	method := "GET"
@@ -66,21 +61,19 @@ func GetIdFromAll(status string) {
 		apiUrlString = apiUrl + "incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
 	}
 	bodyBytes := handlers.HandlerListID(method, apiUrlString)
-
 	json.Unmarshal(bodyBytes, &responsePayload)
 	total := len(responsePayload.Data)
-
 	fmt.Println("Incidents "+status, total)
 
 	for i := 0; i < total; i++ {
 		idJson, _ := json.MarshalIndent(responsePayload.Data[i].TinyID, "", "\t")
 		createdAtJson, _ := json.MarshalIndent(responsePayload.Data[i].CreatedAt, "", "\t")
-		fmt.Println(string(idJson), string(createdAtJson))
+		messageJson, _ := json.MarshalIndent(responsePayload.Data[i].Message, "", "\t")
+		fmt.Println(string(idJson), string(createdAtJson), string(messageJson))
 	}
 }
 
 func CreateIncident(ListIncidentsIDVar *string) {
-
 	fmt.Println("Criando incidente...")
 
 	var apiUrl string
@@ -117,18 +110,12 @@ func CreateIncident(ListIncidentsIDVar *string) {
 }
 
 func ResolveIncident(c models.PayloadUnitMirror) {
-
 	apiUrl, _ := handlers.InitEnv()
-
 	GetIdFromAll("opened")
-
-	fmt.Print("Insert incident ID(Tiny): ")
+	fmt.Print("Insert incident ID(Tiny) to Resolve: ")
 	input := bufio.NewScanner(os.Stdin)
 	input.Scan()
 	incidentID := input.Text()
-
 	apiUrlString = apiUrl + "incidents/" + incidentID + "/resolve?identifierType=tiny"
-
 	handlers.HandlerResolve(c, apiUrlString)
-
 }
