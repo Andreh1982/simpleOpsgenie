@@ -10,7 +10,7 @@ import (
 	"simpleOpsgenie/models"
 )
 
-var genieKey = ""
+var genieKey = "GenieKey b059d7fe-7a26-4790-a4cf-75098b852d1b"
 
 func Handler(method string, url string) []byte {
 

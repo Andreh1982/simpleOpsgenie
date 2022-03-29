@@ -7,20 +7,22 @@ import (
 	"simpleOpsgenie/models"
 )
 
+var apiUrl string = "https://api.opsgenie.com/v1/"
+var apiUrlString string
+
 func GetIncidentList(status string) {
 
 	var respPayload models.PayloadListMirror
-	var apiUrl string
 	method := "GET"
 
 	if status == "closed" {
-		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aclosed&offset=0&limit=200&sort=createdAt&order=desc"
+		apiUrlString = apiUrl + "incidents?query=status%3Aclosed&offset=0&limit=200&sort=createdAt&order=desc"
 	} else if status == "resolved" {
-		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aresolved&offset=0&limit=200&sort=createdAt&order=desc"
+		apiUrlString = apiUrl + "incidents?query=status%3Aresolved&offset=0&limit=200&sort=createdAt&order=desc"
 	} else if status == "opened" {
-		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
+		apiUrlString = apiUrl + "incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
 	}
-	bodyBytes := handlers.Handler(method, apiUrl)
+	bodyBytes := handlers.Handler(method, apiUrlString)
 
 	if status == "opened" {
 		json.Unmarshal(bodyBytes, &respPayload)
@@ -38,8 +40,8 @@ func GetOneIncident(incidentID string) {
 
 	var responsePayload models.PayloadUnitMirror
 	method := "GET"
-	apiUrl := "https://api.opsgenie.com/v1/incidents/" + incidentID + "?identifierType=tiny"
-	bodyBytes := handlers.Handler(method, apiUrl)
+	apiUrlString = apiUrl + "incidents/" + incidentID + "?identifierType=tiny"
+	bodyBytes := handlers.Handler(method, apiUrlString)
 
 	json.Unmarshal(bodyBytes, &responsePayload)
 	prettyJson, _ := json.MarshalIndent(responsePayload, "", "\t")
@@ -49,17 +51,16 @@ func GetOneIncident(incidentID string) {
 func GetIdFromAll(status string) {
 
 	var responsePayload models.PayloadListMirror
-	var apiUrl string
 	method := "GET"
 
 	if status == "closed" {
-		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aclosed&offset=0&limit=200&sort=createdAt&order=desc"
+		apiUrlString = apiUrl + "incidents?query=status%3Aclosed&offset=0&limit=200&sort=createdAt&order=desc"
 	} else if status == "resolved" {
-		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aresolved&offset=0&limit=200&sort=createdAt&order=desc"
+		apiUrlString = apiUrl + "incidents?query=status%3Aresolved&offset=0&limit=200&sort=createdAt&order=desc"
 	} else if status == "opened" {
-		apiUrl = "https://api.opsgenie.com/v1/incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
+		apiUrlString = apiUrl + "incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
 	}
-	bodyBytes := handlers.HandlerListID(method, apiUrl)
+	bodyBytes := handlers.HandlerListID(method, apiUrlString)
 
 	json.Unmarshal(bodyBytes, &responsePayload)
 	total := len(responsePayload.Data)
