@@ -7,13 +7,13 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"simpleOpsgenie/models"
 )
 
-var genieKey = ""
-
 func HandlerSingle(method string, url string) []byte {
 
+	_, genieKey := InitEnv()
 	client := &http.Client{}
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
@@ -40,6 +40,7 @@ func HandlerSingle(method string, url string) []byte {
 
 func HandlerListID(method string, url string) []byte {
 
+	_, genieKey := InitEnv()
 	client := &http.Client{}
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
@@ -67,6 +68,7 @@ func HandlerListID(method string, url string) []byte {
 
 func HandlerCreate(c models.CreateIncident, method string, apiUrl string) {
 
+	_, genieKey := InitEnv()
 	data, err := json.Marshal(c)
 	if err != nil {
 		log.Fatal(err)
@@ -93,7 +95,32 @@ func HandlerCreate(c models.CreateIncident, method string, apiUrl string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	log.Println(string(body))
 
+}
+
+func HandlerResolve() {
+
+}
+
+func HandlerClose() {
+
+}
+
+func InitEnv() (apiUrl string, genieKey string) {
+	//filename is the path to the json config file
+	file, err := os.Open("config.json")
+	if err != nil {
+		os.Exit(0)
+	}
+	decoder := json.NewDecoder(file)
+	configuration := models.Configuration{}
+	err1 := decoder.Decode(&configuration)
+	if err != nil {
+		fmt.Println("error:", err1)
+	}
+	apiUrl = configuration.ApiUrl
+	genieKey = configuration.GenieKey
+
+	return apiUrl, genieKey
 }

@@ -7,10 +7,11 @@ import (
 	"simpleOpsgenie/models"
 )
 
-var apiUrl string = "https://api.opsgenie.com/v1/"
 var apiUrlString string
 
 func GetIncidentList(status string) {
+
+	apiUrl, _ := handlers.InitEnv()
 
 	var respPayload models.PayloadListMirror
 	method := "GET"
@@ -38,6 +39,7 @@ func GetIncidentList(status string) {
 
 func GetOneIncident(incidentID string) {
 
+	apiUrl, _ := handlers.InitEnv()
 	var responsePayload models.PayloadUnitMirror
 	method := "GET"
 	apiUrlString = apiUrl + "incidents/" + incidentID + "?identifierType=tiny"
@@ -50,6 +52,7 @@ func GetOneIncident(incidentID string) {
 
 func GetIdFromAll(status string) {
 
+	apiUrl, _ := handlers.InitEnv()
 	var responsePayload models.PayloadListMirror
 	method := "GET"
 
@@ -74,7 +77,7 @@ func GetIdFromAll(status string) {
 	}
 }
 
-func CreateIncident() {
+func CreateIncident(ListIncidentsIDVar *string) {
 
 	fmt.Println("Criando incidente...")
 
@@ -86,7 +89,7 @@ func CreateIncident() {
 	method := "POST"
 	apiUrl = "https://api.opsgenie.com/v1/incidents/create"
 
-	incidentNumber = "#07"
+	incidentNumber = *ListIncidentsIDVar
 
 	responders.ID = "ebc8157f-e43c-478c-ae41-4b05d0682e22"
 	responders.Type = "team"

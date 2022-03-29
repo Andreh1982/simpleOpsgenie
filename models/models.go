@@ -94,3 +94,8 @@ type Responders struct {
 	Type string `json:"type"`
 	Name string `json:"name"`
 }
+
+type Configuration struct {
+	ApiUrl   string `json:"apiurl"`
+	GenieKey string `json:"geniekey"`
+}
