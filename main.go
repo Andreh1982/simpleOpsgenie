@@ -14,6 +14,7 @@ func main() {
 	ListIncidentsIDVar := flag.String("listid", "", "List Incidents ID by Status(opened, resolved, closed")
 	CreateIncidentVar := flag.String("create", "", "Create a Incident Indented by Number")
 	ResolveIncidentVar := flag.String("resolve", "", "Resolve a Incident(will prompt for wich one)")
+	CloseIncidentVar := flag.String("close", "", "Close a Incident(will prompt for wich one)")
 
 	flag.Parse()
 
@@ -33,6 +34,9 @@ func main() {
 	}
 	if *ResolveIncidentVar != "" {
 		ResolveIncident(ResolveIncidentVar)
+	}
+	if *CloseIncidentVar != "" {
+		CloseIncident(CloseIncidentVar)
 	}
 }
 
@@ -72,4 +76,8 @@ func ListIncidentsID(ListIncidentsIDVar *string) {
 
 func ResolveIncident(ResolveIncidentVar *string) {
 	controllers.ResolveIncident(models.PayloadUnitMirror{})
+}
+
+func CloseIncident(ResolveIncidentVar *string) {
+	controllers.CloseIncident(models.PayloadUnitMirror{})
 }
