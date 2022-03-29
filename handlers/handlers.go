@@ -10,9 +10,9 @@ import (
 	"simpleOpsgenie/models"
 )
 
-var genieKey = "GenieKey b059d7fe-7a26-4790-a4cf-75098b852d1b"
+var genieKey = ""
 
-func Handler(method string, url string) []byte {
+func HandlerSingle(method string, url string) []byte {
 
 	client := &http.Client{}
 	req, err := http.NewRequest(method, url, nil)
@@ -65,8 +65,7 @@ func HandlerListID(method string, url string) []byte {
 	return bodyBytes
 }
 
-func CreateIncidentHandler(c models.CreateIncident, method string, apiUrl string) {
-	// fmt.Println(c)
+func HandlerCreate(c models.CreateIncident, method string, apiUrl string) {
 
 	data, err := json.Marshal(c)
 	if err != nil {

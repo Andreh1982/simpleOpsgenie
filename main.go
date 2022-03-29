@@ -10,14 +10,14 @@ func main() {
 	fmt.Println("Consultando a API...")
 
 	// controllers.GetIncidentList("opened")
-	// controllers.GetIncidentList("resolved")
+	// controllers.GetIncidentList("resolved")s
 	// controllers.GetIncidentList("closed")
 
-	controllers.GetOneIncident("8")
+	// controllers.GetOneIncident("8")
 
-	// controllers.GetIdFromAll("opened")
-	// controllers.GetIdFromAll("resolved")
-	// controllers.GetIdFromAll("closed")
+	controllers.GetIdFromAll("opened")
+	controllers.GetIdFromAll("resolved")
+	controllers.GetIdFromAll("closed")
 
 	// controllers.CreateIncident()
 

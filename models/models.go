@@ -88,3 +88,9 @@ type CreateIncident struct {
 	} `json:"statusPageEntry"`
 	NotifyStakeholders bool `json:"notifyStakeholders"`
 }
+
+type Responders struct {
+	ID   string `json:"id"`
+	Type string `json:"type"`
+	Name string `json:"name"`
+}

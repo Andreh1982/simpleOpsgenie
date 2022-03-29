@@ -22,7 +22,7 @@ func GetIncidentList(status string) {
 	} else if status == "opened" {
 		apiUrlString = apiUrl + "incidents?query=status%3Aopen&offset=0&limit=200&sort=createdAt&order=desc"
 	}
-	bodyBytes := handlers.Handler(method, apiUrlString)
+	bodyBytes := handlers.HandlerSingle(method, apiUrlString)
 
 	if status == "opened" {
 		json.Unmarshal(bodyBytes, &respPayload)
@@ -41,7 +41,7 @@ func GetOneIncident(incidentID string) {
 	var responsePayload models.PayloadUnitMirror
 	method := "GET"
 	apiUrlString = apiUrl + "incidents/" + incidentID + "?identifierType=tiny"
-	bodyBytes := handlers.Handler(method, apiUrlString)
+	bodyBytes := handlers.HandlerSingle(method, apiUrlString)
 
 	json.Unmarshal(bodyBytes, &responsePayload)
 	prettyJson, _ := json.MarshalIndent(responsePayload, "", "\t")
@@ -75,28 +75,26 @@ func GetIdFromAll(status string) {
 }
 
 func CreateIncident() {
-	fmt.Println("Criando incidente...")
 
-	data := struct {
-		ID   string `json:"id"`
-		Type string `json:"type"`
-		Name string `json:"name"`
-	}{
-		"ebc8157f-e43c-478c-ae41-4b05d0682e22",
-		"team",
-		"OPS",
-	}
+	fmt.Println("Criando incidente...")
 
 	var apiUrl string
 	var c models.CreateIncident
 	var incidentNumber string
+	var responders models.Responders
+
 	method := "POST"
 	apiUrl = "https://api.opsgenie.com/v1/incidents/create"
-	incidentNumber = "#06"
+
+	incidentNumber = "#07"
+
+	responders.ID = "ebc8157f-e43c-478c-ae41-4b05d0682e22"
+	responders.Type = "team"
+	responders.Name = "OPS"
 
 	c.Message = "Novo incidente de teste " + incidentNumber
 	c.Description = "Incidente criado via simpleOpsgenie"
-	c.Responders = append(c.Responders, data)
+	c.Responders = append(c.Responders, responders)
 	c.Tags = append(c.Tags, "stg")
 	c.Tags = append(c.Tags, "staging")
 	c.Details.Key1 = "Detalhes key 01 lorem ipsun lorem ipsun lorem ipsun."
@@ -110,5 +108,5 @@ func CreateIncident() {
 
 	fmt.Println(c)
 
-	handlers.CreateIncidentHandler(c, method, apiUrl)
+	handlers.HandlerCreate(c, method, apiUrl)
 }
