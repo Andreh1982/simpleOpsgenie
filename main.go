@@ -9,19 +9,26 @@ import (
 )
 
 func main() {
-	ListIncidentsVar := flag.String("list", "", "List Incidents by Status(opened, resolved, closed)")
-	GetIncidentVar := flag.String("get", "", "Tiny ID from Incident to Retrieve")
-	ListIncidentsIDVar := flag.String("listid", "", "List Incidents ID by Status(opened, resolved, closed")
-	CreateIncidentVar := flag.String("create", "", "Create a Incident Indented by Number")
-	ResolveIncidentVar := flag.String("resolve", "", "Resolve a Incident(will prompt for wich one)")
-	CloseIncidentVar := flag.String("close", "", "Close a Incident(will prompt for wich one)")
+
+	TotalIncidentsVar := flag.String("total", "", "Incidents Totals by Status(opened, resolved, closed)")
+	GetIncidentVar := flag.String("get", "", "Incident Information by TinyID")
+	ListIncidentsIDVar := flag.String("list", "", "List Incidents ID by Status(opened, resolved, closed")
+	CreateIncidentVar := flag.String("create", "", "Create a Incident (Name or Number)")
+	ResolveIncidentVar := flag.Bool("resolve", false, "Resolve a Incident (will prompt for wich one)")
+	CloseIncidentVar := flag.Bool("close", false, "Close a Incident (will prompt for wich one)")
+
+	if len(os.Args) < 2 {
+		fmt.Println("# SimpleOpsgenie v1.0")
+		fmt.Println("Dont known what to do, exiting.")
+		os.Exit(0)
+	}
 
 	flag.Parse()
 
 	fmt.Println("Querying the API...")
 
-	if *ListIncidentsVar != "" {
-		ListIncidents(ListIncidentsVar)
+	if *TotalIncidentsVar != "" {
+		TotalIncidents(TotalIncidentsVar)
 	}
 	if *GetIncidentVar != "" {
 		GetIncident(GetIncidentVar)
@@ -32,10 +39,10 @@ func main() {
 	if *CreateIncidentVar != "" {
 		CreateIncident(CreateIncidentVar)
 	}
-	if *ResolveIncidentVar != "" {
+	if *ResolveIncidentVar {
 		ResolveIncident(ResolveIncidentVar)
 	}
-	if *CloseIncidentVar != "" {
+	if *CloseIncidentVar {
 		CloseIncident(CloseIncidentVar)
 	}
 }
@@ -50,14 +57,14 @@ func GetIncident(GetIncidentVar *string) {
 	}
 }
 
-func ListIncidents(ListIncidentsVar *string) {
-	if *ListIncidentsVar == "opened" {
-		controllers.GetIncidentList("opened")
-	} else if *ListIncidentsVar == "resolved" {
-		controllers.GetIncidentList("resolved")
-	} else if *ListIncidentsVar == "closed" {
-		controllers.GetIncidentList("closed")
-	} else if *ListIncidentsVar == "" {
+func TotalIncidents(TotalIncidentsVar *string) {
+	if *TotalIncidentsVar == "opened" {
+		controllers.TotalIncidentList("opened")
+	} else if *TotalIncidentsVar == "resolved" {
+		controllers.TotalIncidentList("resolved")
+	} else if *TotalIncidentsVar == "closed" {
+		controllers.TotalIncidentList("closed")
+	} else if *TotalIncidentsVar == "" {
 		os.Exit(0)
 	}
 }
@@ -74,10 +81,10 @@ func ListIncidentsID(ListIncidentsIDVar *string) {
 	}
 }
 
-func ResolveIncident(ResolveIncidentVar *string) {
+func ResolveIncident(ResolveIncidentVar *bool) {
 	controllers.ResolveIncident(models.PayloadUnitMirror{})
 }
 
-func CloseIncident(ResolveIncidentVar *string) {
+func CloseIncident(ResolveIncidentVar *bool) {
 	controllers.CloseIncident(models.PayloadUnitMirror{})
 }

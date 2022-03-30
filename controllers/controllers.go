@@ -11,7 +11,7 @@ import (
 
 var apiUrlString string
 
-func GetIncidentList(status string) {
+func TotalIncidentList(status string) {
 	apiUrl, _ := handlers.InitEnv()
 	var respPayload models.PayloadListMirror
 	method := "GET"
