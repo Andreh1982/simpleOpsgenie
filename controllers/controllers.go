@@ -130,3 +130,14 @@ func CloseIncident(c models.PayloadUnitMirror) {
 	apiUrlString = apiUrl + "incidents/" + incidentID + "/close?identifierType=tiny"
 	handlers.HandlerClose(c, apiUrlString)
 }
+
+func DeleteIncident(c models.PayloadUnitMirror) {
+	apiUrl, _ := handlers.InitEnv()
+	GetIdFromAll("closed")
+	fmt.Print("# Insert incident ID(Tiny) to Delete: ")
+	input := bufio.NewScanner(os.Stdin)
+	input.Scan()
+	incidentID := input.Text()
+	apiUrlString = apiUrl + "incidents/" + incidentID + "?identifierType=tiny"
+	handlers.HandlerDelete(c, apiUrlString)
+}

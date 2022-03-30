@@ -138,6 +138,34 @@ func HandlerClose(c models.PayloadUnitMirror, apiUrlString string) {
 	log.Println(string(body))
 }
 
+func HandlerDelete(c models.PayloadUnitMirror, apiUrlString string) {
+	_, genieKey := InitEnv()
+	method := "DELETE"
+	data, err := json.Marshal(c)
+	if err != nil {
+		log.Fatal(err)
+	}
+	reader := bytes.NewReader(data)
+	client := &http.Client{}
+	req, err := http.NewRequest(method, apiUrlString, reader)
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", genieKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(string(body))
+}
+
 func InitEnv() (apiUrl string, genieKey string) {
 	file, err := os.Open("config.json")
 	if err != nil {

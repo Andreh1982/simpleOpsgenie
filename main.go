@@ -12,10 +12,11 @@ func main() {
 
 	TotalIncidentsVar := flag.String("total", "", "Incidents Totals by Status (opened, resolved, closed)")
 	GetIncidentVar := flag.String("get", "", "Incident Information (TinyID)")
-	ListIncidentsIDVar := flag.String("list", "", "List Incidents ID by Status (opened, resolved, closed")
-	CreateIncidentVar := flag.String("create", "", "Create a Incident (Name or Number)")
-	ResolveIncidentVar := flag.Bool("resolve", false, "Resolve a Incident (will prompt for wich one)")
-	CloseIncidentVar := flag.Bool("close", false, "Close a Incident (will prompt for wich one)")
+	ListIncidentsIDVar := flag.String("list", "", "List Incidents ID by Status (opened, resolved, closed)")
+	CreateIncidentVar := flag.String("create", "", "Create an Incident (Name or Number)")
+	ResolveIncidentVar := flag.Bool("resolve", false, "Resolve an Incident (will prompt for wich one)")
+	CloseIncidentVar := flag.Bool("close", false, "Close an Incident (will prompt for wich one)")
+	DeleteIncidentVar := flag.Bool("delete", false, "Delete an Incident (will prompt for wich one)")
 
 	if len(os.Args) < 2 {
 		fmt.Println("# SimpleOpsgenie v1.0")
@@ -45,6 +46,9 @@ func main() {
 	}
 	if *CloseIncidentVar {
 		CloseIncident(CloseIncidentVar)
+	}
+	if *DeleteIncidentVar {
+		DeleteIncident(DeleteIncidentVar)
 	}
 }
 
@@ -86,6 +90,10 @@ func ResolveIncident(ResolveIncidentVar *bool) {
 	controllers.ResolveIncident(models.PayloadUnitMirror{})
 }
 
-func CloseIncident(ResolveIncidentVar *bool) {
+func CloseIncident(CloseIncidentVar *bool) {
 	controllers.CloseIncident(models.PayloadUnitMirror{})
+}
+
+func DeleteIncident(DeleteIncidentVar *bool) {
+	controllers.DeleteIncident(models.PayloadUnitMirror{})
 }
