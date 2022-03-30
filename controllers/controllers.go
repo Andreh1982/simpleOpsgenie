@@ -27,13 +27,13 @@ func TotalIncidentList(status string) {
 
 	if status == "opened" {
 		json.Unmarshal(bodyBytes, &respPayload)
-		fmt.Println("Incidentes Abertos:", respPayload.TotalCount)
+		fmt.Println("# Opened Incidents:", respPayload.TotalCount)
 	} else if status == "resolved" {
 		json.Unmarshal(bodyBytes, &respPayload)
-		fmt.Println("Incidentes Resolvidos:", respPayload.TotalCount)
+		fmt.Println("# Resolved Incidents:", respPayload.TotalCount)
 	} else if status == "closed" {
 		json.Unmarshal(bodyBytes, &respPayload)
-		fmt.Println("Incidentes Fechados:", respPayload.TotalCount)
+		fmt.Println("# Closed Incidents:", respPayload.TotalCount)
 	}
 }
 
@@ -63,7 +63,7 @@ func GetIdFromAll(status string) {
 	bodyBytes := handlers.HandlerListID(method, apiUrlString)
 	json.Unmarshal(bodyBytes, &responsePayload)
 	total := len(responsePayload.Data)
-	fmt.Println("Incidents "+status, total)
+	fmt.Println("# Incidents "+status, total)
 
 	for i := 0; i < total; i++ {
 		idJson, _ := json.MarshalIndent(responsePayload.Data[i].TinyID, "", "\t")
@@ -74,7 +74,7 @@ func GetIdFromAll(status string) {
 }
 
 func CreateIncident(ListIncidentsIDVar *string) {
-	fmt.Println("Criando incidente...")
+	fmt.Println("# Creating Incident...")
 
 	var apiUrl string
 	var c models.CreateIncident
@@ -112,7 +112,7 @@ func CreateIncident(ListIncidentsIDVar *string) {
 func ResolveIncident(c models.PayloadUnitMirror) {
 	apiUrl, _ := handlers.InitEnv()
 	GetIdFromAll("opened")
-	fmt.Print("Insert incident ID(Tiny) to Resolve: ")
+	fmt.Print("# Insert incident ID(Tiny) to Resolve: ")
 	input := bufio.NewScanner(os.Stdin)
 	input.Scan()
 	incidentID := input.Text()
@@ -123,7 +123,7 @@ func ResolveIncident(c models.PayloadUnitMirror) {
 func CloseIncident(c models.PayloadUnitMirror) {
 	apiUrl, _ := handlers.InitEnv()
 	GetIdFromAll("resolved")
-	fmt.Print("Insert incident ID(Tiny) to Close: ")
+	fmt.Print("# Insert incident ID(Tiny) to Close: ")
 	input := bufio.NewScanner(os.Stdin)
 	input.Scan()
 	incidentID := input.Text()
