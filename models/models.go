@@ -2,6 +2,33 @@ package models
 
 import "time"
 
+type IncidentTimeline struct {
+	Data struct {
+		Entries []struct {
+			ID        string    `json:"id"`
+			Group     string    `json:"group"`
+			Type      string    `json:"type"`
+			EventTime time.Time `json:"eventTime"`
+			Hidden    bool      `json:"hidden"`
+			Actor     struct {
+				Name string `json:"name"`
+				Type string `json:"type"`
+			} `json:"actor"`
+			Title struct {
+				Type    string `json:"type"`
+				Content string `json:"content"`
+			} `json:"title"`
+			Description struct {
+				Type    string `json:"type"`
+				Content string `json:"content"`
+			} `json:"description,omitempty"`
+		} `json:"entries"`
+		NextOffset string `json:"nextOffset"`
+	} `json:"data"`
+	Took      float64 `json:"took"`
+	RequestID string  `json:"requestId"`
+}
+
 type PayloadListMirror struct {
 	TotalCount int `json:"totalCount"`
 	Data       []struct {

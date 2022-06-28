@@ -7,9 +7,11 @@ import (
 	"os"
 	"simpleOpsgenie/handlers"
 	"simpleOpsgenie/models"
+	"strings"
 )
 
 var apiUrlString string
+var fullID string
 
 func TotalIncidentList(status string) {
 	apiUrl, _ := handlers.InitEnv()
@@ -44,6 +46,7 @@ func GetOneIncident(incidentID string) {
 	apiUrlString = apiUrl + "incidents/" + incidentID + "?identifierType=tiny"
 	bodyBytes := handlers.HandlerSingle(method, apiUrlString)
 	json.Unmarshal(bodyBytes, &responsePayload)
+	fullID = responsePayload.Data.ID
 	prettyJson, _ := json.MarshalIndent(responsePayload, "", "\t")
 	fmt.Println(string(prettyJson))
 }
@@ -69,6 +72,7 @@ func GetIdFromAll(status string) {
 		idJson, _ := json.MarshalIndent(responsePayload.Data[i].TinyID, "", "\t")
 		createdAtJson, _ := json.MarshalIndent(responsePayload.Data[i].CreatedAt, "", "\t")
 		messageJson, _ := json.MarshalIndent(responsePayload.Data[i].Message, "", "\t")
+
 		fmt.Println(string(idJson), string(createdAtJson), string(messageJson))
 	}
 }
@@ -140,4 +144,50 @@ func DeleteIncident(c models.PayloadUnitMirror) {
 	incidentID := input.Text()
 	apiUrlString = apiUrl + "incidents/" + incidentID + "?identifierType=tiny"
 	handlers.HandlerDelete(c, apiUrlString)
+}
+
+func CheckPostMortems(status string) {
+
+	apiUrl, _ := handlers.InitEnv()
+	var responsePayload models.PayloadListMirror
+	method := "GET"
+
+	if status == "closed" {
+		apiUrlString = apiUrl + "incidents?query=status%3Aclosed&offset=0&limit=200&sort=createdAt&order=desc"
+	} else if status == "resolved" {
+		apiUrlString = apiUrl + "incidents?query=status%3Aresolved&offset=0&limit=200&sort=createdAt&order=desc"
+	}
+
+	bodyBytes := handlers.HandlerListID(method, apiUrlString)
+	json.Unmarshal(bodyBytes, &responsePayload)
+	total := len(responsePayload.Data)
+	fmt.Println("# Incidents "+status, total)
+
+	for i := 0; i < total; i++ {
+		idJson, _ := json.MarshalIndent(responsePayload.Data[i].TinyID, "", "\t")
+		createdAtJson, _ := json.MarshalIndent(responsePayload.Data[i].CreatedAt, "", "\t")
+		messageJson, _ := json.MarshalIndent(responsePayload.Data[i].Message, "", "\t")
+
+		fmt.Println(string(idJson), string(createdAtJson), string(messageJson))
+	}
+
+}
+
+func ListPostmortem() {
+
+	var responseTimeline models.IncidentTimeline
+	apiIncidentTimeLine := "https://api.opsgenie.com/v2/incident-timelines/" + fullID + "/entries"
+	bodyBytesTimeline := handlers.HandlerSingle("GET", apiIncidentTimeLine)
+	json.Unmarshal(bodyBytesTimeline, &responseTimeline)
+	prettyJsonTimeline, _ := json.MarshalIndent(responseTimeline, "", "\t")
+	fmt.Println(string(prettyJsonTimeline))
+
+	for i := 0; i < len(responseTimeline.Data.Entries); i++ {
+		checkText := responseTimeline.Data.Entries[i].Description.Content
+		allLowerCase := strings.ToLower(checkText)
+		if strings.Contains(allLowerCase, "postmortem") {
+			fmt.Println(string(checkText))
+		}
+	}
+
 }

@@ -17,6 +17,7 @@ func main() {
 	ResolveIncidentVar := flag.Bool("resolve", false, "Resolve an Incident (will prompt for wich one)")
 	CloseIncidentVar := flag.Bool("close", false, "Close an Incident (will prompt for wich one)")
 	DeleteIncidentVar := flag.Bool("delete", false, "Delete an Incident (will prompt for wich one)")
+	CheckPostmortemsVar := flag.String("postmortem", "", "List portmortems by status (closed, resolved)")
 
 	if len(os.Args) < 2 {
 		fmt.Println("# SimpleOpsgenie v1.0")
@@ -50,6 +51,9 @@ func main() {
 	if *DeleteIncidentVar {
 		DeleteIncident(DeleteIncidentVar)
 	}
+	if *CheckPostmortemsVar != "" {
+		CheckPostmortems(CheckPostmortemsVar)
+	}
 }
 
 func CreateIncident(CreateIncidentVar *string) {
@@ -70,6 +74,16 @@ func TotalIncidents(TotalIncidentsVar *string) {
 	} else if *TotalIncidentsVar == "closed" {
 		controllers.TotalIncidentList("closed")
 	} else if *TotalIncidentsVar == "" {
+		os.Exit(0)
+	}
+}
+
+func CheckPostmortems(CheckPostmortemsVar *string) {
+	if *CheckPostmortemsVar == "resolved" {
+		controllers.CheckPostMortems("resolved")
+	} else if *CheckPostmortemsVar == "closed" {
+		controllers.CheckPostMortems("closed")
+	} else if *CheckPostmortemsVar == "" {
 		os.Exit(0)
 	}
 }
